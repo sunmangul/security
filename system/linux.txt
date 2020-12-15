@@ -1,0 +1,30 @@
+cd : 디렉토리 이동
+pwd : 현재 디렉토리 출력
+mkdir : 디렉토리 생성
+rmdir : 디렉토리 제거
+
+cp : 파일 복사 (cp file1 file2 : file1을 file2라는 이름으로 복사
+rm : 파일 제거
+mv : 파일의 디렉토리 이동이 아닐경우 파일의 이름변경하는 용도
+(mv file1 file2 : file1의 이름을 file2로 바꿈)
+cat : 파일의 내용을 보여줌
+
+w : 현재 접속자를 알려줌
+tty는 콘솔접속, pts는 터미널 접속, pts/0 pts/1 pts/2는 접속순서
+접속한 사람들의 ip(콘솔로 접속한 경우 ip가 나타나지 않음), 접속한 시간
+사용자가 얼마나 접속을 안하고 쉬고있는지 시간나타냄 + cpu 지연시간
+WHAT필드의 명령어가 지연된 시간, 사용자들이 현재 사용중인 명령어 보여줌
+
+finger -l : 해당 사용자의 많은 정보를 볼 수 있음
+tty : 자신의 터미널 정보를 확인함
+ifconfig : 현재 서버의 ip정보를 볼 수 있음
+
+write ID /dev/pts/pts번호 : 다른 사용자에게 쪽지를 보냄
+ctrl + d 종료
+wall test : 접속중인 모든 사용자에게 쪽지를 보냄
+
+whoami < id (둘 다 사용자 정보지만 정보의 양 차이)
+uname -a : 현재 서버의 커널버전
+cat /etc/*release : 서버에 설치된 OS 버전확인
+rpm -qa : 직접 패키지의 정보를 가져옴
+cat /proc/cpuinfo : 서버의 cpu 정보수집
