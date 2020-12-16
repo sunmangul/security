@@ -28,3 +28,24 @@ pw : programming    리눅스 권한
 id : trainer10
 pw : best!          SetUID
 
+id : level1
+pw : level1
+explanation :
+- ls -alF
+- cat hint
+- find / -user level2 -perm -4000 2>/dev/null
+- cd /bin
+- ls -al ExecuteMe
+- ./ExecuteMe
+- /bin/bash
+- my-pass
+
+id : level2
+pw : hacker or cracker
+
+id : level3
+pw : can you fly
+
+id : guest
+pw : shaki0920
+

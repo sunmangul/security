@@ -65,7 +65,7 @@ id : 사용자의 정보; (uid : USER ID의 약자; gid : Group ID의 약자(특
 groups : 현재 자신이 속해 있는 그룹을 말함(임의로 변경하지 않았으면 uid와 같은 그룹))
 / - / rwx / rwx / rwx / 1 / uid / gid /
 / 파일 / 유저권한 / 그룹권한 / 아더권한 /  / 유저 아이디 / 그룹 아이디 /
-r : read, w : write, x : execute
+r : read, w : write, x : execute, s : SetUID
 
 Remote 해킹 : 서버에 아이디가 없을 때 아이디를 얻고자 시도하는 것
 >무작위 아이디, 비밀번호 | 데몬의 취약점 공격 | 게시판, 방명록 이용 등등
@@ -74,3 +74,13 @@ Local 해킹 : 해킹하려는 서버의 일반 계정을 가지고 있을 때 r
 shadow 파일은 기본적으로 루트계정만이 제어할 수 있는데 일반 사용자가 접근 가능한 이유는
 passwd 파일에 루트 권한의 SetUID가 걸려 있어 passwd 파일 실행동안 루트로서 일시적인
 아이디 변경이 가능
+기법 : 레이스 컨디션, IFS버그, 링크버그, 버퍼오버플로우, 포맷 스티링 어택(Local Exploit)
+
+[버퍼 오버 플로우(C언어 필수)]
+joe라는 파일이 있는데 joe filename을 써서 filename의 내용을 편집하면 1000자가 넘어갔을 때 프로그램이
+제대로 실해오디지 않는데 이를 이용하여 /bin/bash 파일을 실행하게 하고 joe가 실행되는 동안 루트권한을 얻는데
+제대로 종료되지 않으니 /bin/bash로 이동해도 루트 권한이 남아있게 된다.
+
+find  (-perm : 권한과 일치하는 파일을 찾음), (-name : 이름과 일치하는 파일 찾음), 
+(-user : 유저와 일치하는 파일을 찾음), (-group : 그룹과 일치하는 파일을 찾음)
+find / [-perm, -name, -user, -group] (-)srwx (2>/dev/null :  Standard Error 삭제)
