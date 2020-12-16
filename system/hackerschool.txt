@@ -1,0 +1,33 @@
+id : trainer1
+pw : trainer1
+
+id : trainer2
+pw : linuxer
+
+id : trainer3
+pw : computer
+
+id : trainer4
+pw : mungguta
+
+id : trainer5
+pw : goodluck
+
+id : trainer6
+pw : coffee
+
+id : trainer7
+pw : to the top	    리눅스 파일 압축, 풀기(백업)
+
+id : trainer8
+pw : player	        프로그램 작성, 컴파일
+
+id : trainer9
+pw : programming    리눅스 권한
+
+id : trainer10
+pw : best!          SetUID
+
+id : guest
+pw : shaki0920
+
