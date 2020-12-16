@@ -28,6 +28,3 @@ pw : programming    리눅스 권한
 id : trainer10
 pw : best!          SetUID
 
-id : guest
-pw : shaki0920
-
