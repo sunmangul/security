@@ -45,7 +45,3 @@ pw : hacker or cracker
 
 id : level3
 pw : can you fly
-
-id : guest
-pw : shaki0920
-
