@@ -1,0 +1,22 @@
+[GDB에 들어가기 앞서]
+-fno-stack-protector 옵션을 포함하는 이유는 gcc가 스택을 보호하기 위해
+canary라는 것을 함수내에서 사용하는 스택 프레임과 return address 사이에 넣음
+버퍼 오버플로우가 발생해서 canary를 덮으면 프로그램을 종료해서 오류를 방지
+>>SSP라고 함
+아무튼 그래서 이런 보호기법을 해제하기 위해 -fno-stack-protector를 사용
+반대로 모든 *프로시저에 보호기법을 적용하기 위해 -fstack-protector-all을 사용
+*프로시저 : 특정한 로직을 처리하기만하고 반환하지 않는 서브 프로그램
+
+[GDB 사용 이유]
+오픈소스로 공개된 무료 디버거임(Doby is free!)
+디버거는 코드에서 각 라인이 실행될 때 어떤 메모리 주소에 올라가고 과정을 보여주는 조흔거
+콘솔기반이라 ELE파일과 같은 리눅스 기반 실행 파일을 동적으로 따라가며 분석할 때 좋음
+
+[GDB 쓰는 법] >> 대충 어셈블리 어느정도하고 오셈 ㅇㅇ
+gdb ./tomato : gdb로 토마토에 붙음
+set disassembly-flavor [명령어 형식] : 어셈블리 코드 문법을 설정하는 명령어로
+intel과 at&t 둘 중 골라쓰면 된다
+ex) set disassembly-falvor att
+disas [함수 이름] : 함수의 어셈블리 코드를 보는 명령어
+ex) disas main
+b *[메모리주소] : breakpoint를 거는 명령
