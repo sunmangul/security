@@ -42,6 +42,18 @@ explanation :
 
 id : level2
 pw : hacker or cracker
+explanation :
+- ls -alF
+- cat hint
+- find / -user level3 -perm -4000 2>/dev/null
+- cd /usr/bin
+- ls editor
+- :!/bin/bash
+- my-pass:
 
 id : level3
-pw : can you fly
+pw : can you fly?
+explanation :
+- ls -alF
+- cat hint  fiel : autodig.txt -참-조
+- cd /bin
