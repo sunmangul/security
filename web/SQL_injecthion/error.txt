@@ -1,0 +1,20 @@
+-SQL Injection 에러유발인자
+
+Using Closed Bracket )
+https://www.target.com/index.php?id=1)
+
+Using Single Quote '
+https://www.target.com/index.php?id=1'
+
+Using Double Quote "
+https://www.target.com/index.php?id=1"
+
+-SQL Injection 에러 형식
+
+My-SQL 에러 형식
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '\'' at line 1
+(Zixem)
+
+
+IIS ASP 에러 형식
+An error occurred on the server when processing the URL. Please contact the system administrator. If you are the system administrator please click here to find out more about this error.
