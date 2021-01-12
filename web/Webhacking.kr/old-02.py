@@ -7,7 +7,7 @@ count = ''
 length = 0
 
 url = "https://webhacking.kr/challenge/web-02"
-session = "savdp4i05pp95ih6lbimrshsem"
+session = ""
 
 print ("! Start")
 
